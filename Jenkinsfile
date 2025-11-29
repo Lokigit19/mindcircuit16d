@@ -28,13 +28,13 @@ pipeline {
     }
 }
 post {
-        always {
-            echo 'Pipeline finished (always runs)'
-        }
-        success {
-            echo 'Pipeline succeeded!'
-        }
-        failure {
-            echo 'Pipeline failed!'
-        }
+    success {
+      mail to: 'machalvr@gmail.com',
+           subject: "Jenkins: SUCCESS — ${currentBuild.fullDisplayName}",
+           body: "Good news! Build succeeded: ${env.BUILD_URL}"
+    }
+    failure {
+      mail to: 'machalvr@gmail.com',
+           subject: "Jenkins: FAILURE — ${currentBuild.fullDisplayName}",
+           body: "Build failed: ${env.BUILD_URL}"
     }
