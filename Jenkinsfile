@@ -28,14 +28,19 @@ pipeline {
     }
 }
 post {
-    success {
-      mail to: 'machalvr@gmail.com',
-           subject: "Jenkins: SUCCESS — ${currentBuild.fullDisplayName}",
-           body: "Good news! Build succeeded: ${env.BUILD_URL}"
-    }
-    failure {
-      mail to: 'machalvr@gmail.com',
-           subject: "Jenkins: FAILURE — ${currentBuild.fullDisplayName}",
-           body: "Build failed: ${env.BUILD_URL}"
+    alwasy {
+        script {
+            def buildStatus = currentBuild.CurrentResult
+            def buildUser = currentBuild.getBuildCauses('hudson.model.Cause$UserIdCause')
+
+            emailext (
+                subject: "Jenkins: SUCCESS — ${currentBuild.fullDisplayName}",
+                    
+                 body: " " "
+                    "Good news! Build succeeded: ${env.BUILD_URL}"
+                 " " " ,
+                     to: 'machalvr@gmail.com',
+                    from : machalvr@gmail.com
+       )
     }
 }
