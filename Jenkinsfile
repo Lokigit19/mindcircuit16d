@@ -27,13 +27,13 @@ pipeline {
         }
     }
 }
-post {
-    always {
-      emailext(
-        to: 'machalvr@gmail.com',
-        subject: "Build ${currentBuild.currentResult}: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-        body: "The build has finished with status: ${currentBuild.currentResult}\n" +
-              "View the build details: ${env.BUILD_URL}"
-      )
-      }
-    }
+    post {
+       always {
+         emailext(
+            to: 'machalvr@gmail.com',
+            subject: "Build ${currentBuild.currentResult}: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+             body: "The build has finished with status: ${currentBuild.currentResult}\n" +
+                 "View the build details: ${env.BUILD_URL}"
+                )
+          }
+     }
