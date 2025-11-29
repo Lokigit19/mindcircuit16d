@@ -38,4 +38,3 @@ post {
             echo 'Pipeline failed!'
         }
     }
-}
