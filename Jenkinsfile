@@ -38,3 +38,4 @@ post {
            subject: "Jenkins: FAILURE — ${currentBuild.fullDisplayName}",
            body: "Build failed: ${env.BUILD_URL}"
     }
+}
