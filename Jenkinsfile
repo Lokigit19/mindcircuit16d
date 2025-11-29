@@ -44,4 +44,3 @@ Link to build: ${env.BUILD_URL}
       }
     }
   }
-}
