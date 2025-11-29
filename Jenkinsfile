@@ -29,18 +29,12 @@ pipeline {
 }
 post {
     always {
-      script {
-        def buildStatus = currentBuild.currentResult
-        def buildUser = currentBuild.getBuildCauses('hudson.model.Cause$UserIdCause')
-
-        emailext(
-          subject: "Jenkins: ${buildStatus} — ${currentBuild.fullDisplayName}",
-          body: """Good news! Build finished with status: ${buildStatus}
-Link to build: ${env.BUILD_URL}
-""",
-          to: 'machalvr@gmail.com',
-          from: 'machalvr@gmail.com'
-        )
+      emailext(
+        to: 'machalvr@gmail.com',
+        subject: "Build ${currentBuild.currentResult}: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+        body: "The build has finished with status: ${currentBuild.currentResult}\n" +
+              "View the build details: ${env.BUILD_URL}"
+      )
       }
     }
   }
