@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    tools{
+        maven 'mvn1'
+    }
 
     stages {
         stage('git clone') {
@@ -7,10 +10,29 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/Lokigit19/mindcircuit16d.git'
             }
         }
-    stage('build tar') {
+     stage('mvn build') {
             steps {
                 sh 'mvn clean install'
             }
         }
+    stage('sonar scan') {
+            steps {
+                echo 'scan is done'
+            }
+        }
+    stage('tar deployed') {
+            steps {
+                echo 'tar is deployed'
+            }
+        }
     }
 }
+post {
+    
+        success {
+            echo 'This runs only if pipeline succeeded'
+        }
+        failure {
+            echo 'This runs only if pipeline failed'
+        }
+    }
