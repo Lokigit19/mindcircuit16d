@@ -28,19 +28,20 @@ pipeline {
     }
 }
 post {
-    alwasy {
-        script {
-            def buildStatus = currentBuild.CurrentResult
-            def buildUser = currentBuild.getBuildCauses('hudson.model.Cause$UserIdCause')
+    always {
+      script {
+        def buildStatus = currentBuild.currentResult
+        def buildUser = currentBuild.getBuildCauses('hudson.model.Cause$UserIdCause')
 
-            emailext (
-                subject: "Jenkins: SUCCESS — ${currentBuild.fullDisplayName}",
-                    
-                 body: " " "
-                    "Good news! Build succeeded: ${env.BUILD_URL}"
-                 " " " ,
-                     to: 'machalvr@gmail.com',
-                    from : machalvr@gmail.com
-       )
+        emailext(
+          subject: "Jenkins: ${buildStatus} — ${currentBuild.fullDisplayName}",
+          body: """Good news! Build finished with status: ${buildStatus}
+Link to build: ${env.BUILD_URL}
+""",
+          to: 'machalvr@gmail.com',
+          from: 'machalvr@gmail.com'
+        )
+      }
     }
+  }
 }
