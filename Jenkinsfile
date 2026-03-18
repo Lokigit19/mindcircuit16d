@@ -34,6 +34,7 @@ pipeline {
             }
         }
         stage('Docker Image push') {
+            steps {
             withCredentials([string(credentialsId: 'dockerhub-creds', variable: 'dockerhub')]) {
                          sh 'docker login -u loki1912 -p ${dockerhub-creds}' 
             }
