@@ -6,6 +6,7 @@ pipeline {
     }
 
     stages {
+
         stage('git clone') {
             steps {
                 git branch: 'main', url: 'https://github.com/Lokigit19/mindcircuit16d.git'
@@ -33,13 +34,22 @@ pipeline {
                 sh 'docker build -t loki1912/lokidoc:${BUILD_NUMBER} -f Dockerfile .'
             }
         }
+
         stage('Docker Image push') {
             steps {
-            withCredentials([string(credentialsId: 'dockerhub-creds', variable: 'dockerhub')]) {
-                         sh 'docker login -u loki1912 -p ${dockerhub-creds}' 
+                withCredentials([usernamePassword(
+                    credentialsId: 'dockerhub-creds',
+                    usernameVariable: 'USERNAME',
+                    passwordVariable: 'PASSWORD'
+                )]) {
+                    sh '''
+                        echo $PASSWORD | docker login -u $USERNAME --password-stdin
+                        docker push loki1912/lokidoc:${BUILD_NUMBER}
+                    '''
+                }
             }
         }
-    }
+    }   // ✅ properly closing stages
 
     post {
         always {
@@ -51,5 +61,4 @@ pipeline {
             )
         }
     }
- }
 }
