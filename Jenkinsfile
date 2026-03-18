@@ -1,5 +1,6 @@
 pipeline {
     agent any
+
     tools {
         maven 'maven'
     }
@@ -10,25 +11,27 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/Lokigit19/mindcircuit16d.git'
             }
         }
+
         stage('Sonar scan') {
             steps {
                 sh '''
-                      mvn sonar:sonar \
-                     -Dsonar.host.url=http://13.217.61.57:9000 \
-                     -Dsonar.login=squ_4700821277ba17f610950314ccf251822e6c3e8a
-                 '''
+                    mvn sonar:sonar \
+                    -Dsonar.host.url=http://13.217.61.57:9000 \
+                    -Dsonar.login=squ_4700821277ba17f610950314ccf251822e6c3e8a
+                '''
             }
         }
-    stage('Build Artifact') {
+
+        stage('Build Artifact') {
             steps {
-              sh 'mvn clean package'
+                sh 'mvn clean package'
             }
         }
-    stage('Docker Image build') {
+
+        stage('Docker Image build') {
             steps {
-              sh 'docker build -t loki1912/lokidoc:${BUILD_NUMBER} -f Dockerfile .'
+                sh 'docker build -t loki1912/lokidoc:${BUILD_NUMBER} -f Dockerfile .'
             }
-          }
         }
     }
 
@@ -42,3 +45,4 @@ pipeline {
             )
         }
     }
+}
