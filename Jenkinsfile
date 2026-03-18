@@ -1,7 +1,7 @@
 pipeline {
     agent any
     tools {
-        maven 'mvn1'
+        maven 'maven'
     }
 
     stages {
@@ -10,20 +10,25 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/Lokigit19/mindcircuit16d.git'
             }
         }
-        stage('mvn build') {
+        stage('Sonar scan') {
             steps {
-                sh 'mvn clean install'
+                sh '''
+                      mvn sonar:sonar \
+                     -Dsonar.host.url=http://13.217.61.57:9000 \
+                     -Dsonar.login=squ_4700821277ba17f610950314ccf251822e6c3e8a
+                 '''
             }
         }
-        stage('sonar scan') {
+    stage('Build Artifact') {
             steps {
-                echo 'scan is done'
+              sh 'mvn clean package'
             }
         }
-        stage('tar deployed') {
+    stage('Docker Image build') {
             steps {
-                echo 'tar is deployed'
+              sh 'docker build -t loki1912/lokidoc:${BUILD_NUMBER} -f Dockerfile .'
             }
+          }
         }
     }
 
