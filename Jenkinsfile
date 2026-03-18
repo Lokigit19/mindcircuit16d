@@ -33,6 +33,11 @@ pipeline {
                 sh 'docker build -t loki1912/lokidoc:${BUILD_NUMBER} -f Dockerfile .'
             }
         }
+        stage('Docker Image push') {
+            withCredentials([string(credentialsId: 'dockerhub-creds', variable: 'dockerhub')]) {
+                         sh 'docker login -u loki1912 -p ${dockerhub-creds}' 
+            }
+        }
     }
 
     post {
