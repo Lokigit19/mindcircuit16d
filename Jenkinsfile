@@ -39,6 +39,8 @@ pipeline {
             steps {
                 withCredentials([string(credentialsId: 'dockerhub-creds', variable: 'dockerhub')]) {
                          sh 'docker login -u loki1912 -p ${dockerhub}' 
+                         sh 'docker push loki1912/lokidoc:${BUILD_NUMBER}' 
+                    echo 'Pushed to Docker Hub'
                 }
             }
         }
