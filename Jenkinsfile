@@ -37,19 +37,12 @@ pipeline {
 
         stage('Docker Image push') {
             steps {
-                withCredentials([usernamePassword(
-                    credentialsId: 'dockerhub-creds',
-                    usernameVariable: 'USERNAME',
-                    passwordVariable: 'PASSWORD'
-                )]) {
-                    sh '''
-                        echo $PASSWORD | docker login -u $USERNAME --password-stdin
-                        docker push loki1912/lokidoc:${BUILD_NUMBER}
-                    '''
+                withCredentials([string(credentialsId: 'dockerhub-creds', variable: 'dockerhub')]) {
+                         sh 'docker login -u loki1912 -p ${dockerhub}' 
                 }
             }
         }
-    }   // ✅ properly closing stages
+    }   
 
     post {
         always {
