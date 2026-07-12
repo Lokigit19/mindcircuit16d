@@ -1,0 +1,44 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('git repo clone') {
+            steps {
+                echo 'git repo clone'
+                git branch: 'main', url: 'https://github.com/Lokigit19/mindcircuit16d.git'
+            }
+        }
+        stage('sonar scan') {
+            steps {
+                echo 'static code analysis'
+                sh 'ls -lrth'
+                sh '''
+                    mvn sonar:sonar \
+                    -Dsonar.host.url=http://3.89.119.206:9000 \
+                    -Dsonar.login=squ_79936c3099b6853496c20b09747d21a39b50f5a3
+                '''
+            }
+        }
+        stage('artifact build') {
+            steps {
+                echo 'building artifact'
+                sh 'mvn clean package'
+            }
+        }
+        stage('docker image build') {
+            steps {
+                echo 'building docker image'
+                sh 'docker build -t loki1912/loki:${BUILD_NUMBER} -f dockerfile .'
+            }
+        }
+        stage('docker image push') {
+            steps {
+                withCredentials([string(credentialsId: 'credspddocker', variable: 'docker')]) {
+                         sh 'docker login -u loki1912 -p ${docker}' 
+                         sh 'docker push loki1912/loki:${BUILD_NUMBER}' 
+                    echo 'Pushed to Docker Hub'
+                    }
+                 }
+             }
+           }
+}
